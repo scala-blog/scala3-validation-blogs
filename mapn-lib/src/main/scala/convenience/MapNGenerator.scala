@@ -1,7 +1,7 @@
 package convenience
 
 object MapNGenerator extends App:
-  val n = 1
+  val n = 10
 
   println("""package convenience
             |
@@ -9,11 +9,11 @@ object MapNGenerator extends App:
             |object Applicative:
             |  type EitherError[A] = Either[List[Throwable], A]
             |  """.stripMargin)
-  for(k <- 1 to 10) {
+  for(k <- 1 to n) {
     val i = k+1
     val A_List = (1 to i).map{j => s"A${j}"}.mkString(", ")
     val methodParams: String = (1 to i).map{ j =>
-      s"a${j}Either: EitherError[A$j]"
+      s"a${j}Either: => EitherError[A$j]"
     }.mkString(", ")
     val fParams: String = (1 to i).map { j =>
       s"goodParams(${j-1}).asInstanceOf[A$j]"
