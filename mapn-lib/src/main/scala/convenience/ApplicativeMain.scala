@@ -1,7 +1,7 @@
 package convenience
 
-import convenience.Applicative.EitherError
-import convenience.Lib.LeftThrowable
+import convenience.Lib.{EitherError, LeftThrowable}
+
 
 object ApplicativeMain extends App:
 
@@ -43,11 +43,10 @@ object ApplicativeMain extends App:
 
 
   final case class SSN3 private(area: Int, group: Int, serial: Int)
-
   object SSN3:
     def fromString(string: String): Either[List[Throwable], SSN3] = string match
       case null =>
-        Lib.LeftThrowable("Social security is null")
+        LeftThrowable("Social security is null")
       case _ =>
         val split = string.split("-")
         if (split.size != 3)
@@ -68,7 +67,6 @@ object ApplicativeMain extends App:
           Right(SSN3(area = split(0).toInt, group = split(1).toInt, serial = split(2).toInt))
 
   final case class Email3 private(user: String, domain: String)
-
   object Email3:
     def fromString(string: String): Either[List[Throwable], Email3] = string match
       case null =>
@@ -80,25 +78,25 @@ object ApplicativeMain extends App:
         else
           Right(Email3(user = split(0), domain = split(1)))
 
-  final case class Employee(ssn: SSN2, email: Email2)
+  final case class Employee(ssn: SSN3, email: Email3)
 
   val employeeGood: EitherError[Employee] = Applicative.mapN(
-    Email2.fromString("hernan@gmail.com"),
-    SSN2.fromString("111-11-1111")
+    Email3.fromString("hernan@gmail.com"),
+    SSN3.fromString("111-11-1111")
   )((email, ssn) => Employee(email = email, ssn = ssn))
   println(employeeGood)
   // Right(Employee(SSN2(111,11,1111),Email2(hernan,gmail.com)))
 
   val employeeBadEmail: EitherError[Employee] = Applicative.mapN(
-    Email2.fromString("hernan#gmail.com"),
-    SSN2.fromString("111-11-1111")
+    Email3.fromString("hernan#gmail.com"),
+    SSN3.fromString("111-11-1111")
   )((email, ssn) => Employee(email = email, ssn = ssn))
   println(employeeBadEmail)
   // Left(List(java.lang.Throwable: Email 'hernan#gmail.com' is malformed))
 
   val employeeBadEmailAndSsn: EitherError[Employee] = Applicative.mapN(
-    Email2.fromString("hernan#gmail.com"),
-    SSN2.fromString("111111111")
+    Email3.fromString("hernan#gmail.com"),
+    SSN3.fromString("111111111")
   )((email, ssn) => Employee(email = email, ssn = ssn))
   println(employeeBadEmailAndSsn)
   // Left(List(java.lang.Throwable: Email 'hernan#gmail.com' is malformed, java.lang.Throwable: Three different sets of digits expected but 1 found))

@@ -1,9 +1,9 @@
 package convenience
 
+import convenience.Lib.EitherError
+
 
 object Applicative:
-  type EitherError[A] = Either[List[Throwable], A]
-
 
   def mapN[A1, A2, R](a1Either: => EitherError[A1], a2Either: => EitherError[A2])(
     f: (A1, A2) => R
