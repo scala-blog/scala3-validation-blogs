@@ -1,7 +1,7 @@
 package convenience
 
 import convenience.Applicative
-import convenience.Applicative.EitherError
+import convenience.Lib.EitherError
 import org.scalatest.flatspec.AnyFlatSpec
 
 class ApplicativeSuite  extends AnyFlatSpec {
