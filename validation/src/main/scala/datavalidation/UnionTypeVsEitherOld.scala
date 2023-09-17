@@ -1,0 +1,5 @@
+package datavalidation
+
+class UnionTypeVsEitherOld {
+
+}
